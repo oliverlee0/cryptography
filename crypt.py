@@ -26,7 +26,7 @@ def encrypt_vigenere(plaintext, keyword):
 	for i in range(0, len(plaintext)):
 		textchar = plaintext[i]
 		keychar = keyword[i % len(keyword)]
-		ciphertext += chr(ord(textchar) + ord(keychar) - 65)
+		iphertext += chr(ord(textchar) + ord(keychar) - 65)
 	return ciphertext
 
 # Arguments: string, string
@@ -78,7 +78,8 @@ def encrypt_mhkc(plaintext, public_key):
 	return C
 
 # Arguments: integer, integer
-# Q >= R, gcd(Q, R) = 1
+# Preconditions: Q >= R, gcd(Q, R) = 1
+# Returns: tuple (x, y) where xQ + yR = 1
 def euclidean_extended(Q, R):
 	if Q % R == 1:
 		return (1, (Q // R) * -1)
@@ -109,7 +110,7 @@ def decrypt_mhkc(ciphertext, private_key):
 def main():
 	private_key = generate_private_key()
 	public_key = create_public_key(private_key)
-	plaintext = input("Input a message:\n").upper()
+	plaintext = input("Input a message:\n")
 	ciphertext = encrypt_mhkc(plaintext, public_key)
 	print("Here is your encrypted message:")
 	print(encrypt_mhkc(plaintext, public_key))
