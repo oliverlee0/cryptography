@@ -8,7 +8,8 @@ def encrypt_caesar(plaintext, offset):
 	ciphertext = ""
 	for char in plaintext:
 		if char >= 'A' and char <= 'Z':
-			ciphertext += chr(ord(char) + offset)
+			ciphertext += chr(((ord(char) + offset - 13) % 26) + 65)
+		else: ciphertext += char
 	return ciphertext
 
 # Arguments: string, integer
@@ -16,7 +17,9 @@ def encrypt_caesar(plaintext, offset):
 def decrypt_caesar(ciphertext, offset):
 	plaintext = ""
 	for char in ciphertext:
-		plaintext += chr(ord(char) - offset)
+		if char >= 'A' and char <= 'Z':
+			plaintext += chr(((ord(char) - offset - 13) % 26) + 65)
+		else: plaintext += char
 	return plaintext
 
 # Vigenere Cipher
@@ -24,20 +27,26 @@ def decrypt_caesar(ciphertext, offset):
 # Returns: string
 def encrypt_vigenere(plaintext, keyword):
 	ciphertext = ""
-	for i in range(0, len(plaintext)):
+	for i in range(len(plaintext)):
 		textchar = plaintext[i]
 		keychar = keyword[i % len(keyword)]
-		iphertext += chr(ord(textchar) + ord(keychar) - 65)
+		offset = ord(keychar) - 65
+		if textchar >= 'A' and textchar <= 'Z':
+			ciphertext += chr(((ord(textchar) + offset - 13) % 26) + 65)
+		else: ciphertext += textchar
 	return ciphertext
 
 # Arguments: string, string
 # Returns: string
 def decrypt_vigenere(ciphertext, keyword):
 	plaintext = ""
-	for i in range(0, len(ciphertext)):
+	for i in range(len(ciphertext)):
 		textchar = ciphertext[i]
 		keychar = keyword[i % len(keyword)]
-		plaintext += chr(ord(textchar) - ord(keychar) + 65)
+		offset = ord(keychar) + 65
+		if textchar >= 'A' and textchar <= 'Z':
+			plaintext += chr(((ord(char) - offset - 13) % 26) + 65)
+		else: plaintext += textchar
 	return plaintext
 
 # Merkle-Hellman Knapsack Cryptosystem
@@ -109,14 +118,10 @@ def decrypt_mhkc(ciphertext, private_key):
 		
 
 def main():
-	private_key = generate_private_key()
-	public_key = create_public_key(private_key)
-	plaintext = input("Input a message:\n")
-	ciphertext = encrypt_mhkc(plaintext, public_key)
-	print("Here is your encrypted message:")
-	print(encrypt_mhkc(plaintext, public_key))
-	print("Here is your decrypted message:")
-	print(decrypt_mhkc(ciphertext, private_key))
+	l = input('Enter test case:\n').split(',')
+	f = encrypt_caesar
+	if f == encrypt_caesar or f == decrypt_caesar: l[1] = int(l[1])
+	print(f(l[0], l[1]) == l[2])
 
 if __name__ == '__main__':
 	main()
